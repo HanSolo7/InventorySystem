@@ -4,8 +4,11 @@ A basic inventory system in .Net
 Running the application:
 
 1) Using Visual Studion 2013 and .NET framework 4.5 or greater open the solution file. 
-2) Run the application. 
-3) On the home page you can find a description of the api and how to use it. 
+
+2) Run the application.
+
+3) On the home page you can find a description of the api and how to use it.
+
 4) On the home page you can also find a form to test adding an item. The home page also displays data as it was retrieved using JQUERY Ajax calls to the api get inventory method. 
 
 Trade-offs:
