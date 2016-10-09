@@ -1,0 +1,27 @@
+﻿<div id="body">
+    <div>
+        <h3>API</h3>
+        <ul>
+            <li><b>api/inventory</b> : (Method:GET) gets all inventory as well as notifications (Expired, Taken, Inventory).</li>
+            <li><b>api/inventory/{id}</b> : (Method:GET) gets the inventory item by id.</li>
+            <li><b>api/inventory</b> : (Method:POST) adds the item to the inventory.</li>
+            <li><b>api/inventory/take/{label}</b> : (Method:POST) adds the item to the inventory.</li>
+        </ul>
+        
+    </div>
+    <div class="data">
+        <h4>Add Label</h4>
+        <form action="api/Inventory" method="post">
+            <p>Label: <input type="text" name="label" /></p>
+            <p>Expiration Date: <input type="datetime" name="expiration_date" /></p>
+            <p>Type: <input type="text" name="type" /></p>
+            <input type="submit" value="Add" />
+        </form>
+    </div>
+    <div id="notifications">
+
+    </div>
+    <div id="inventory">
+
+    </div>
+</div>
