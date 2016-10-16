@@ -15,16 +15,16 @@ namespace InventorySystem.Controllers
     {
         private InventoryDBContext _dbContext = new InventoryDBContext();
 
+        //Gets all unexpired items remaining in the inventory.
         [AcceptVerbs("GET")]
         public string Get()
         {
             Dictionary<string, object> result = new Dictionary<string, object>();
-            result.Add("ExpiredItems", Inventory.GetExpiredItems(_dbContext));
-            result.Add("TakenItems", Inventory.GetTakenItems(_dbContext));
             result.Add("Inventory", _dbContext.Inventory.Where(item => item.IsDeleted == false).ToList());
             return JsonConvert.SerializeObject(result);
         }
 
+        //Gets an inventory item by id.
         [AcceptVerbs("GET")]
         [ActionName("Get")]
         public string Get(int id)
@@ -43,12 +43,11 @@ namespace InventorySystem.Controllers
             }
             catch
             {
-                Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Item not found."));
                 return JsonConvert.SerializeObject("Bad Request - Item Not Found.");
             }
         }
 
-        // POST api/values
+        //Adds an item to the inventory.
         [AcceptVerbs("POST")]
         public string Post(FormDataCollection postData)
         {
@@ -69,12 +68,12 @@ namespace InventorySystem.Controllers
                     Request.CreateResponse(HttpStatusCode.Created, modelResult);
                     result[0] = "Item Created";
                     result[1] = modelResult;
+                    Inventory item = (Inventory)modelResult;
                     return JsonConvert.SerializeObject(result);
                 }
             }
             catch
             {
-                Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Data type conversion error occurred."));
                 result[0] = "Bad Request";
                 result[1] = "Data type conversion error.";
                 return JsonConvert.SerializeObject(result);
@@ -82,6 +81,7 @@ namespace InventorySystem.Controllers
             
         }
 
+        //Takes an item from the inventory and performs a soft delete on the database record.
         [AcceptVerbs("GET")]
         [ActionName("take")]
         public string Take(string label)
@@ -99,22 +99,23 @@ namespace InventorySystem.Controllers
                     _dbContext.SaveChanges();
                     result[0] = "Item taken from inventory.";
                     result[1] = item;
+                    NotificationsController.MessageCallback(string.Format("The item '{0}' (ID:{1}) has been taken from the inventory.", item.Label, item.ID.ToString()));
                 }
                 else
                 {
                     result[0] = "Item not found.";
                     result[1] = "Unable to find item '" + label + "'";
                 }
-
                 return JsonConvert.SerializeObject(result);
             }
             catch
             {
-                Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Data type conversion error occurred."));
                 result[0] = "Bad Request";
                 result[1] = "Item not found.";
                 return JsonConvert.SerializeObject(result);
             }
         }
+
+        
     }
 }

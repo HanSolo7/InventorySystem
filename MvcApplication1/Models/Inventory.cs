@@ -43,9 +43,9 @@ namespace InventorySystem.Models
             return inventoryItem;
         }
 
-        public static List<Inventory> GetExpiredItems(InventoryDBContext dbContext)
+        public static List<Inventory> GetExpiredItems(InventoryDBContext dbContext, DateTime dateToCompare)
         {
-            return dbContext.Inventory.Where(item => item.ExpirationDate.CompareTo(DateTime.Now) == -1).ToList();
+            return dbContext.Inventory.Where(item => item.ExpirationDate.CompareTo(dateToCompare) == -1).ToList();
         }
 
         public static List<Inventory> GetTakenItems(InventoryDBContext dbContext)
